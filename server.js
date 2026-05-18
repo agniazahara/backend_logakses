@@ -44,9 +44,11 @@ db.query(createTable, (err) => {
 
 // IMPORT ROUTES
 const tamuRoutes = require('./routes/tamuRoutes')
+const authRoutes = require('./routes/authRoutes')
 
 // PAKAI ROUTES
 app.use('/tamu', tamuRoutes)
+app.use('/auth', authRoutes)
 
 // TEST ROOT
 app.get('/', (req, res) => {

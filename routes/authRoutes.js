@@ -2,6 +2,9 @@ const express = require('express')
 const router = express.Router()
 const db = require('../models/db')
 
+/* =========================
+   LOGIN
+========================= */
 router.post('/login', (req, res) => {
 
   const { username, password } = req.body
@@ -33,6 +36,72 @@ router.post('/login', (req, res) => {
     })
 
   })
+
+})
+
+/* =========================
+   GANTI PASSWORD
+========================= */
+router.put('/change-password', (req, res) => {
+
+  const {
+    username,
+    oldPassword,
+    newPassword
+  } = req.body
+
+  const cekSql = `
+    SELECT * FROM admin
+    WHERE username = ? AND password = ?
+  `
+
+  db.query(
+    cekSql,
+    [username, oldPassword],
+    (err, result) => {
+
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: 'Server error'
+        })
+      }
+
+      if (result.length === 0) {
+        return res.status(401).json({
+          success: false,
+          message: 'Password lama salah'
+        })
+      }
+
+      const updateSql = `
+        UPDATE admin
+        SET password = ?
+        WHERE username = ?
+      `
+
+      db.query(
+        updateSql,
+        [newPassword, username],
+        (err2) => {
+
+          if (err2) {
+            return res.status(500).json({
+              success: false,
+              message: 'Gagal update password'
+            })
+          }
+
+          res.json({
+            success: true,
+            message: 'Password berhasil diganti'
+          })
+
+        }
+      )
+
+    }
+  )
 
 })
 

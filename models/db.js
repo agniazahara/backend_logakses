@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const mysql = require('mysql2')
 
 console.log("ENV CHECK DB_HOST:", process.env.DB_HOST)

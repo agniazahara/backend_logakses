@@ -140,6 +140,8 @@ router.get('/admins', (req, res) => {
 ========================= */
 router.post('/admins', (req, res) => {
 
+  console.log("BODY:", req.body)
+
   const { username, password } = req.body
 
   const sql = `
@@ -147,25 +149,24 @@ router.post('/admins', (req, res) => {
     VALUES (?, ?)
   `
 
-  db.query(
-    sql,
-    [username, password],
-    (err, result) => {
+  db.query(sql, [username, password], (err, result) => {
 
-      if (err) {
-        return res.status(500).json({
-          message: 'Gagal tambah admin'
-        })
-      }
+    if (err) {
+      console.log("ERROR:", err)
 
-      res.json({
-        success: true,
-        message: 'Admin berhasil ditambahkan'
+      return res.status(500).json({
+        success: false,
+        error: err
       })
-
     }
-  )
 
+    console.log("INSERT BERHASIL", result)
+
+    res.json({
+      success: true,
+      message: 'Admin berhasil ditambahkan'
+    })
+  })
 })
 
 module.exports = router

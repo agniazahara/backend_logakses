@@ -119,10 +119,15 @@ router.get('/admins', (req, res) => {
   db.query(sql, (err, result) => {
 
     if (err) {
-      return res.status(500).json({
-        message: 'Server error'
-      })
-    }
+
+  console.log("ERROR TAMBAH ADMIN:", err)
+
+  return res.status(500).json({
+    success: false,
+    error: err
+  })
+
+}
 
     res.json(result)
 

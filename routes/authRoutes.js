@@ -130,4 +130,37 @@ router.get('/admins', (req, res) => {
 
 })
 
+/* =========================
+   TAMBAH ADMIN
+========================= */
+router.post('/admins', (req, res) => {
+
+  const { username, password } = req.body
+
+  const sql = `
+    INSERT INTO admin (username, password)
+    VALUES (?, ?)
+  `
+
+  db.query(
+    sql,
+    [username, password],
+    (err, result) => {
+
+      if (err) {
+        return res.status(500).json({
+          message: 'Gagal tambah admin'
+        })
+      }
+
+      res.json({
+        success: true,
+        message: 'Admin berhasil ditambahkan'
+      })
+
+    }
+  )
+
+})
+
 module.exports = router

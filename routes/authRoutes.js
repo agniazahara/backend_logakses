@@ -105,4 +105,29 @@ router.put('/change-password', (req, res) => {
 
 })
 
+/* =========================
+   GET ALL ADMIN
+========================= */
+router.get('/admins', (req, res) => {
+
+  const sql = `
+    SELECT id, username
+    FROM admin
+    ORDER BY id ASC
+  `
+
+  db.query(sql, (err, result) => {
+
+    if (err) {
+      return res.status(500).json({
+        message: 'Server error'
+      })
+    }
+
+    res.json(result)
+
+  })
+
+})
+
 module.exports = router

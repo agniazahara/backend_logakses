@@ -144,18 +144,20 @@ router.post('/permohonan/approve/:id', (req, res) => {
       const p = result[0]
 
       const insertSql = `
-        INSERT INTO tamu
-        (
-          nama,
-          nip,
-          asal_tamu,
-          keperluan,
-          no_hp,
-          email,
-          foto
-        )
-        VALUES (?,?,?,?,?,?,?)
-      `
+  INSERT INTO tamu
+  (
+    nama,
+    nip,
+    asal_tamu,
+    keperluan,
+    no_hp,
+    email,
+    foto,
+    status,
+    jam_masuk
+  )
+  VALUES (?,?,?,?,?,?,?,?,NOW())
+`
 
       db.query(
         insertSql,
@@ -166,7 +168,8 @@ router.post('/permohonan/approve/:id', (req, res) => {
           p.keperluan,
           p.no_hp,
           p.email,
-          p.foto
+          p.foto,
+          'DI DALAM'
         ],
         (err2) => {
 

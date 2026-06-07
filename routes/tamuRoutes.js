@@ -17,6 +17,31 @@ const upload = multer({ storage: storage })
 const tamuController = require('../controllers/tamuController')
 
 router.get('/', tamuController.getAllTamu)
+
+router.get('/permohonan', (req, res) => {
+
+  const sql = `
+    SELECT *
+    FROM permohonan_tamu
+    ORDER BY id DESC
+  `
+
+  db.query(sql, (err, result) => {
+
+    if (err) {
+      console.log(err)
+
+      return res.status(500).json({
+        success: false
+      })
+    }
+
+    res.json(result)
+
+  })
+
+})
+
 router.get('/:id', tamuController.getTamuById)
 
 router.post(
@@ -92,28 +117,6 @@ router.post('/permohonan', upload.single('foto'), (req, res) => {
 
 })
 
-router.get('/permohonan', (req, res) => {
 
-  const sql = `
-    SELECT *
-    FROM permohonan_tamu
-    ORDER BY id DESC
-  `
-
-  db.query(sql, (err, result) => {
-
-    if (err) {
-      console.log(err)
-
-      return res.status(500).json({
-        success: false
-      })
-    }
-
-    res.json(result)
-
-  })
-
-})
 
 module.exports = router

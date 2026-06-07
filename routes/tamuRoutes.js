@@ -21,10 +21,11 @@ router.get('/', tamuController.getAllTamu)
 router.get('/permohonan', (req, res) => {
 
   const sql = `
-    SELECT *
-    FROM permohonan_tamu
-    ORDER BY id DESC
-  `
+  SELECT *
+  FROM permohonan_tamu
+  WHERE status = 'MENUNGGU'
+  ORDER BY id DESC
+`
 
   db.query(sql, (err, result) => {
 
@@ -39,6 +40,37 @@ router.get('/permohonan', (req, res) => {
     res.json(result)
 
   })
+
+})
+
+router.get('/permohonan/status/:id', (req, res) => {
+
+  const id = req.params.id
+
+  db.query(
+    'SELECT status FROM permohonan_tamu WHERE id = ?',
+    [id],
+    (err, result) => {
+
+      if (err) {
+        return res.status(500).json({
+          success: false
+        })
+      }
+
+      if (result.length === 0) {
+        return res.status(404).json({
+          success: false
+        })
+      }
+
+      res.json({
+        success: true,
+        status: result[0].status
+      })
+
+    }
+  )
 
 })
 
@@ -108,8 +140,10 @@ router.post('/permohonan', upload.single('foto'), (req, res) => {
       }
 
       res.json({
-        success:true,
-        message:"Permohonan berhasil dikirim"
+  success: true,
+  id: result.insertId,
+  message: "Permohonan berhasil dikirim"
+
       })
 
     }
@@ -182,20 +216,20 @@ router.post('/permohonan/approve/:id', (req, res) => {
     }
 
     db.query(
-      'DELETE FROM permohonan_tamu WHERE id = ?',
-      [id],
-      (err3) => {
+  "UPDATE permohonan_tamu SET status = 'DISETUJUI' WHERE id = ?",
+  [id],
+  (err3) => {
 
-        if (err3) {
-          console.log(err3)
+    if (err3) {
+      console.log(err3)
 
-          return res.status(500).json({
-            success: false
-          })
-        }
+      return res.status(500).json({
+        success: false
+      })
+    }
 
-        res.json({
-          success: true
+    res.json({
+      success: true
           })
 
         }

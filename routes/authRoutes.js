@@ -169,4 +169,34 @@ router.post('/admins', (req, res) => {
   })
 })
 
+/* =========================
+   HAPUS ADMIN
+========================= */
+router.delete('/admins/:id', (req, res) => {
+
+  const id = req.params.id
+
+  const sql = `
+    DELETE FROM admin
+    WHERE id = ?
+  `
+
+  db.query(sql, [id], (err) => {
+
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        message: 'Gagal hapus admin'
+      })
+    }
+
+    res.json({
+      success: true,
+      message: 'Admin berhasil dihapus'
+    })
+
+  })
+
+})
+
 module.exports = router

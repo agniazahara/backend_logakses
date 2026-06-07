@@ -29,4 +29,66 @@ router.put('/keluar/:id', tamuController.keluarTamu)
 
 router.delete('/:id', tamuController.hapusTamu)
 
+/* =========================
+   PERMOHONAN TAMU
+========================= */
+router.post('/permohonan', upload.single('foto'), (req, res) => {
+
+  const {
+    nama,
+    nip,
+    asal_tamu,
+    no_hp,
+    email,
+    keperluan
+  } = req.body
+
+  const foto =
+    req.file ? req.file.filename : null
+
+  const sql = `
+    INSERT INTO pending_tamu
+    (
+      nama,
+      nip,
+      asal_tamu,
+      keperluan,
+      no_hp,
+      email,
+      foto
+    )
+    VALUES (?,?,?,?,?,?,?)
+  `
+
+  db.query(
+    sql,
+    [
+      nama,
+      nip,
+      asal_tamu,
+      keperluan,
+      no_hp,
+      email,
+      foto
+    ],
+    (err,result)=>{
+
+      if(err){
+        console.log(err)
+
+        return res.status(500).json({
+          success:false
+        })
+      }
+
+      res.json({
+        success:true,
+        message:"Permohonan berhasil dikirim"
+      })
+
+    }
+  )
+
+})
+
 module.exports = router

@@ -41,6 +41,30 @@ db.query(createTable, (err) => {
   }
 })
 
+const createPermohonanTable = `
+CREATE TABLE IF NOT EXISTS permohonan_tamu (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nama VARCHAR(100),
+  nip VARCHAR(50),
+  asal_tamu VARCHAR(100),
+  keperluan VARCHAR(255),
+  no_hp VARCHAR(20),
+  email VARCHAR(100),
+  foto VARCHAR(255),
+
+  status VARCHAR(50) DEFAULT 'MENUNGGU',
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+`
+
+db.query(createPermohonanTable, (err) => {
+  if (err) {
+    console.log("❌ Gagal create table permohonan:", err)
+  } else {
+    console.log("✅ Table permohonan_tamu ready")
+  }
+})
 
 // IMPORT ROUTES
 const tamuRoutes = require('./routes/tamuRoutes')

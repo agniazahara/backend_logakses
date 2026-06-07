@@ -117,6 +117,16 @@ router.post('/permohonan', upload.single('foto'), (req, res) => {
 
 })
 
+router.post('/permohonan/approve/:id', (req, res) => {
 
+  const id = req.params.id
+
+  console.log("Approve ID:", id)
+
+  res.json({
+    success: true
+  })
+
+})
 
 module.exports = router

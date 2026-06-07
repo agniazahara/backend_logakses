@@ -160,29 +160,42 @@ router.post('/permohonan/approve/:id', (req, res) => {
 `
 
       db.query(
-        insertSql,
-        [
-          p.nama,
-          p.nip,
-          p.asal_tamu,
-          p.keperluan,
-          p.no_hp,
-          p.email,
-          p.foto,
-          'DI DALAM'
-        ],
-        (err2) => {
+  insertSql,
+  [
+    p.nama,
+    p.nip,
+    p.asal_tamu,
+    p.keperluan,
+    p.no_hp,
+    p.email,
+    p.foto,
+    'DI DALAM'
+  ],
+  (err2) => {
 
-          if (err2) {
-            console.log(err2)
+    if (err2) {
+      console.log(err2)
 
-            return res.status(500).json({
-              success: false
-            })
-          }
+      return res.status(500).json({
+        success: false
+      })
+    }
 
-          res.json({
-            success: true
+    db.query(
+      'DELETE FROM permohonan_tamu WHERE id = ?',
+      [id],
+      (err3) => {
+
+        if (err3) {
+          console.log(err3)
+
+          return res.status(500).json({
+            success: false
+          })
+        }
+
+        res.json({
+          success: true
           })
 
         }
@@ -190,7 +203,8 @@ router.post('/permohonan/approve/:id', (req, res) => {
 
     }
   )
-
+ }
+  )
 })
 
 module.exports = router

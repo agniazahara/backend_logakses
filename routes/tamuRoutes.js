@@ -1,5 +1,6 @@
 const express = require('express')
 const multer = require('multer')
+const db = require('../models/db')
 const router = express.Router()
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -47,7 +48,7 @@ router.post('/permohonan', upload.single('foto'), (req, res) => {
     req.file ? req.file.filename : null
 
   const sql = `
-    INSERT INTO pending_tamu
+    INSERT INTO permohonan_tamu
     (
       nama,
       nip,

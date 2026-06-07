@@ -121,11 +121,72 @@ router.post('/permohonan/approve/:id', (req, res) => {
 
   const id = req.params.id
 
-  console.log("Approve ID:", id)
+  db.query(
+    'SELECT * FROM permohonan_tamu WHERE id = ?',
+    [id],
+    (err, result) => {
 
-  res.json({
-    success: true
-  })
+      if (err) {
+        console.log(err)
+
+        return res.status(500).json({
+          success: false
+        })
+      }
+
+      if (result.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: 'Data tidak ditemukan'
+        })
+      }
+
+      const p = result[0]
+
+      const insertSql = `
+        INSERT INTO tamu
+        (
+          nama,
+          nip,
+          asal_tamu,
+          keperluan,
+          no_hp,
+          email,
+          foto
+        )
+        VALUES (?,?,?,?,?,?,?)
+      `
+
+      db.query(
+        insertSql,
+        [
+          p.nama,
+          p.nip,
+          p.asal_tamu,
+          p.keperluan,
+          p.no_hp,
+          p.email,
+          p.foto
+        ],
+        (err2) => {
+
+          if (err2) {
+            console.log(err2)
+
+            return res.status(500).json({
+              success: false
+            })
+          }
+
+          res.json({
+            success: true
+          })
+
+        }
+      )
+
+    }
+  )
 
 })
 

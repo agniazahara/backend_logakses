@@ -241,4 +241,30 @@ router.post('/permohonan/approve/:id', (req, res) => {
   )
 })
 
+router.post('/permohonan/reject/:id', (req, res) => {
+
+  const id = req.params.id
+
+  db.query(
+    "UPDATE permohonan_tamu SET status = 'DITOLAK' WHERE id = ?",
+    [id],
+    (err) => {
+
+      if (err) {
+        console.log(err)
+
+        return res.status(500).json({
+          success: false
+        })
+      }
+
+      res.json({
+        success: true
+      })
+
+    }
+  )
+
+})
+
 module.exports = router
